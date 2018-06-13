@@ -1,10 +1,10 @@
 const { Enquiry } = require('./db')
 const path = require("path");
-
 const express = require('express')
 const bodyParser = require('body-parser')
-
 const app = express()
+
+app.set('view engine', 'ejs')
 
 app.use(bodyParser.urlencoded({ extended: false}))
 
@@ -13,12 +13,7 @@ app.get('/contact', (req, res) => {
 })
 
 app.get('/enquiries', async (req, res) => {
-    let answer = await Enquiry.find()
-    let html = ""
-    for (line of answer) {
-    html = html + `<p>Name:${line.name} Email:${line.email} Phone:${line.phone} Message:${line.message}</p> `
-    }
-    res.send(html)
+    res.render('enquiries', {answer : await Enquiry.find()})
 })
 
 app.post('/contact', (req, res) => {
